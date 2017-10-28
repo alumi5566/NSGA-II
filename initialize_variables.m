@@ -1,5 +1,6 @@
 function f = initialize_variables(N, M, V, min_range, max_range)
 
+% N是population size(同一代有多少個體)
 %% function f = initialize_variables(N, M, V, min_tange, max_range) 
 % This function initializes the chromosomes. Each chromosome has the
 % following at this stage
@@ -56,6 +57,8 @@ for i = 1 : N
     % possible values. V is the number of decision variable. A random
     % number is picked between the minimum and maximum possible values for
     % the each decision variable.
+    % 前V個:每一個decision Var都亂數出一個值
+    % 後M個:為每一個objective套上亂數出的值
     for j = 1 : V
         f(i,j) = min(j) + (max(j) - min(j))*rand(1);
     end
@@ -67,5 +70,5 @@ for i = 1 : N
     % with information about the number of objective functions which are
     % processed and returns the value for the objective functions. These
     % values are now stored at the end of the chromosome itself.
-    f(i,V + 1: K) = evaluate_objective(f(i,:), M, V);
+    f(i,V + 1: K) = evaluate_objective(f(i,:), M, V, max_range);
 end

@@ -1,4 +1,4 @@
-function f = evaluate_objective(x, M, V)
+function f = evaluate_objective(x, M, V, max_range)
 
 %% function f = evaluate_objective(x, M, V)
 % Function to evaluate the objective functions for the given input vector
@@ -39,22 +39,54 @@ function f = evaluate_objective(x, M, V)
 % Number of objective is two, while it can have arbirtarly many decision
 % variables within the range -5 and 5. Common number of variables is 3.
 f = [];
-% Objective function one
-sum = 0;
-for i = 1 : V - 1
-    sum = sum - 10*exp(-0.2*sqrt((x(i))^2 + (x(i + 1))^2));
-end
-% Decision variables are used to form the objective function.
-f(1) = sum;
+N = [];
+Ccost= [];
+Fcost = [];
+%=============Parameter=============
+%a1 = 108; a2 = 294; a3 = 117;
+b1 = 0.045; b2 = 0.0323; b3 = 0.058;
+c1 = 0.05; c2 = 0.007; c3 = 0.003;
+%t1 = 15; t2 = 16; t3 = 16
+%===================================
+a1 = 320; a2 = 766; a3 = 315;
+%b1 = 0.032; b2 = 0.076; b3 = 0.0429;
+%c1 = 0.07; c2 = 0.015; c3 = 0.035;
+t1 = 32; t2 = 31; t3 = 32;
+%===================================
+%a1 = 7128; a2 = 9927; a3 = 9004;
+%b1 = 0.0387; b2 = 0.0326; b3 = 0.0481;
+%c1 = 0.0438; c2 = 0.057; c3 = 0.0526;
+%t1 = 90; t2 = 76; t3 = 98;
+%===================================
 
-% Objective function two
-sum = 0;
-for i = 1 : V
-    sum = sum + (abs(x(i))^0.8 + 5*(sin(x(i)))^3);
-end
-% Decision variables are used to form the objective function.
-f(2) = sum;
+%N1 = a1*(exp(-b1*max_range(1)))*(exp(-c1*x(1)));
+N1 = a1*(exp(-b1*t1))*(exp(-c1*x(1)));
+N2d = a2 + N1;
+%N2 = N2d*(exp(-b2*max_range(2)))*(exp(-c2*x(2)));
+N2 = N2d*(exp(-b2*t2))*(exp(-c2*x(2)));
+N3d = a3 + N2;
+%N3 = N3d*(exp(-b3*max_range(3)))*(exp(-c3*x(3)));
+N3 = N3d*(exp(-b3*t3))*(exp(-c3*x(3)));
+f(1) = N3*-1;
+   
+%Ccost(1) = a1*(exp(-b1*max_range(1)));
+%Ccost(2) = N2d - a1*(exp(-b1*max_range(1)));
+%Ccost(3) = N3d - N2d*(exp(-b2*max_range(2)));
+%Fcost(1) = N1- a1*(exp(-b1*max_range(1)));
+%Fcost(2) = N2 - N2d*(exp(-b2*max_range(2)));
+   
+Ccost(1) = a1*(exp(-b1*t1));
+Ccost(2) = N2d - a1*(exp(-b1*t1));
+Ccost(3) = N3d - N2d*(exp(-b2*t2));
+Fcost(1) = N1- a1*(exp(-b1*t1));
+Fcost(2) = N2 - N2d*(exp(-b2*t2));
 
+f(2) = 10*(x(1)+x(2)+x(3)) + 2*(Ccost(1)+Ccost(2)+Ccost(3)) +5*(Fcost(1)+Fcost(2));
+
+if (M ==3)
+    f(3) = x(1)+x(2)+x(3); 
+end
+   
 %% Check for error
 if length(f) ~= M
     error('The number of decision variables does not match you previous input. Kindly check your objective function');

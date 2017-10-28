@@ -185,7 +185,10 @@ end
 
 %% Result
 % Save the result in ASCII text format.
-save solution.txt chromosome -ASCII
+filename = '1001MOEAresult.txt';
+cd D:\MATLAB;
+save(filename, 'chromosome', '-ASCII');
+cd D:\MATLAB\NSGA-II;
 
 %% Visualize
 % The following is used to visualize the result if objective space
@@ -195,4 +198,8 @@ if M == 2
 elseif M ==3
     plot3(chromosome(:,V + 1),chromosome(:,V + 2),chromosome(:,V + 3),'*');
 end
+grid on;
+
+space = spacing(chromosome(: , V+1 : V+M))
+
     

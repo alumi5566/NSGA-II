@@ -111,8 +111,8 @@ for i = 1 : N
         end
         % Evaluate the objective function for the offsprings and as before
         % concatenate the offspring chromosome with objective value.
-        child_1(:,V + 1: M + V) = evaluate_objective(child_1, M, V);
-        child_2(:,V + 1: M + V) = evaluate_objective(child_2, M, V);
+        child_1(:,V + 1: M + V) = evaluate_objective(child_1, M, V, u_limit);
+        child_2(:,V + 1: M + V) = evaluate_objective(child_2, M, V, u_limit);
         % Set the crossover flag. When crossover is performed two children
         % are generate, while when mutation is performed only only child is
         % generated.
@@ -148,7 +148,7 @@ for i = 1 : N
         end
         % Evaluate the objective function for the offspring and as before
         % concatenate the offspring chromosome with objective value.    
-        child_3(:,V + 1: M + V) = evaluate_objective(child_3, M, V);
+        child_3(:,V + 1: M + V) = evaluate_objective(child_3, M, V, u_limit);
         % Set the mutation flag
         was_mutation = 1;
         was_crossover = 0;
